@@ -2,6 +2,7 @@ package br.com.stuxnet.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+// a viaCEP devolve mais campos do que a gente usa(ibge, gia, ddd, siafi etc), então mando o Jackson ignorar o que não existe aqui, senão dava erro
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class ViaCepResponse {
@@ -10,11 +11,12 @@ public class ViaCepResponse {
     private String logradouro;
     private String complemento;
     private String bairro;
-    private String localidade;
+    private String localidade; // aqui é a cidade, a viaCEP chama de "localidade"
     private String uf;
-    private String erro;
+    private Boolean erro; // o Boolean aqui com B maiúsculo é de proposito, em um CEP válido esse campo nem vem no JSON, ai fica null. com boolean primitivo ele viraria false e ia dar no mesmo, mas assim dá para diferenciar "não veio" de "veio false", basicamente 
     
     public ViaCepResponse(){
+        // esse campo aqui é vazio mesmo, por que no Jackson o construtor vazio é obrigatório, para conseguir montar o objeto  
     }
 
     public String getCep() {
@@ -65,14 +67,15 @@ public class ViaCepResponse {
         this.uf = uf;
     }
 
-    public String getErro() {
+    public Boolean getErro() {
         return erro;
     }
 
-    public void setErro(String erro) {
+    public void setErro(Boolean erro) {
         this.erro = erro;
     }
 
+    // para facilitar ver o objeto no log e nos testes
     @Override 
     public String toString(){
         return "ViaCepResponse{cep='" + cep + "', logradouro='" + logradouro + "', bairro='" + bairro + "', localidade= '" + localidade + "', uf='" + uf + "'}"; 
