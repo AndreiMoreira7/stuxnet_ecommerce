@@ -37,3 +37,15 @@ public class ComponenteHardwareController {
         return ResponseEntity.ok(service.listarTodos());
     }
 }
+
+@GetMapping("/categoria/{categoria}")
+    public ResponseEntity<List<ComponenteHardwareResponseDTO>> listarPorCategoria(
+            @PathVariable br.com.stuxnet.model.enums.CategoriaHardware categoria) {
+        return ResponseEntity.ok(service.listarPorCategoria(categoria));
+    }
+
+    @DeleteMapping("/{sku}")
+    public ResponseEntity<Void> desativar(@PathVariable String sku) {
+        service.desativarPorSku(sku);
+        return ResponseEntity.noContent().build();
+    }

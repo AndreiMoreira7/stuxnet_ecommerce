@@ -1,10 +1,15 @@
+C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\controller\ClienteController.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\controller\ComponenteHardwareController.java
+C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\controller\EnderecoController.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\controller\GlobalExceptionHandler.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\controller\PedidoController.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\DataSeeder.java
+C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\dto\ClienteRequestDTO.java
+C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\dto\ClienteResponseDTO.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\dto\ComponenteHardwareRequestDTO.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\dto\ComponenteHardwareResponseDTO.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\dto\EnderecoDTO.java
+C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\dto\EnderecoFreteResponseDTO.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\dto\ItemPedidoRequestDTO.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\dto\PedidoRequestDTO.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\dto\PedidoResponseDTO.java
@@ -17,7 +22,10 @@ C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\model\Pedido.j
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\repository\ClienteRepository.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\repository\ComponenteHardwareRepository.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\repository\PedidoRepository.java
+C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\service\ClienteService.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\service\ComponenteHardwareService.java
+C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\service\event\AuditoriaLogisticaListener.java
+C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\service\event\PedidoRealizadoEvent.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\service\PedidoService.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\service\strategy\CalculadoraPrecoStrategy.java
 C:\Users\PDA - Aluno\Desktop\StuxNet\src\main\java\br\com\stuxnet\service\strategy\PrecoCartaoStrategy.java

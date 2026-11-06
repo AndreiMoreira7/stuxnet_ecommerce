@@ -51,9 +51,9 @@ public class ComponenteHardwareService {
         return ComponenteHardwareResponseDTO.fromEntity(salvo, precoPix);
     }
 
-    @Transactional(readOnly = true)
+   @Transactional(readOnly = true)
     public List<ComponenteHardwareResponseDTO> listarTodos() {
-        return repository.findAll().stream()
+        return repository.findByAtivoTrue().stream()
                 .map(comp -> ComponenteHardwareResponseDTO.fromEntity(
                         comp,
                         calcularPrecoPorModalidade(comp.getPrecoBase(), "PIX")
@@ -61,11 +61,20 @@ public class ComponenteHardwareService {
                 .toList();
     }
 
-    public BigDecimal calcularPrecoPorModalidade(BigDecimal precoBase, String modalidade) {
-        CalculadoraPrecoStrategy strategy = estrategiasPreco.getOrDefault(
-                modalidade.toUpperCase(),
-                estrategiasPreco.get("CARTAO")
-        );
-        return strategy.calcularPrecoFinal(precoBase);
+    @Transactional(readOnly = true)
+    public List<ComponenteHardwareResponseDTO> listarPorCategoria( br.com.stuxnet.model.enums.CategoriaHardware categoria) {
+        return repository.findByCategoriaAndAtivoTrue(categoria).stream()
+                .map(comp -> ComponenteHardwareResponseDTO.fromEntity(
+                        comp,
+                        calcularPrecoPorModalidade(comp.getPrecoBase(), "PIX")
+                ))
+                .toList();
     }
-}
+
+    @Transactional
+    public void desativarPorSku(String sku) {
+        ComponenteHardware componente = repository.findBySku(sku.trim().toUpperCase())
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("Componente não encontrado com SKU: " + sku));
+        componente.setAtivo(false);
+        repository.save(componente);
+    }

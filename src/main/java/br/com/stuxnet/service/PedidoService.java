@@ -17,23 +17,28 @@ import br.com.stuxnet.repository.ComponenteHardwareRepository;
 import br.com.stuxnet.repository.PedidoRepository;
 import jakarta.persistence.EntityNotFoundException;
 
+import br.com.stuxnet.service.event.PedidoRealizadoEvent;
+import org.springframework.context.ApplicationEventPublisher;
+
 @Service
 public class PedidoService {
 
+    private final ApplicationEventPublisher eventPublisher;
     private final PedidoRepository pedidoRepository;
     private final ClienteRepository clienteRepository;
     private final ComponenteHardwareRepository componenteRepository;
     private final ComponenteHardwareService componenteService;
 
     public PedidoService(PedidoRepository pedidoRepository,
-                         ClienteRepository clienteRepository,
-                         ComponenteHardwareRepository componenteRepository,
-                         ComponenteHardwareService componenteService) {
-        this.pedidoRepository = pedidoRepository;
-        this.clienteRepository = clienteRepository;
-        this.componenteRepository = componenteRepository;
-        this.componenteService = componenteService;
-    }
+                     ClienteRepository clienteRepository,
+                     ComponenteHardwareRepository componenteRepository,
+                     ComponenteHardwareService componenteService,
+                     ApplicationEventPublisher eventPublisher) {
+    this.pedidoRepository = pedidoRepository;
+    this.clienteRepository = clienteRepository;
+    this.componenteRepository = componenteRepository;
+    this.componenteService = componenteService;
+    this.eventPublisher = eventPublisher;
 
     @Transactional
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
@@ -71,6 +76,15 @@ public class PedidoService {
         }
 
         Pedido pedidoSalvo = pedidoRepository.save(novoPedido);
+
+        eventPublisher.publishEvent(new PedidoRealizadoEvent(
+        pedidoSalvo.getCodigoPedido(),
+        cliente.getEmail(),
+        pedidoSalvo.getModalidadePagamento(),
+        pedidoSalvo.getValorTotal(),
+        pedidoSalvo.getDataCriacao()
+));
+
         return PedidoResponseDTO.fromEntity(pedidoSalvo);
     }
 }
