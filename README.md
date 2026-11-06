@@ -1,7 +1,7 @@
 # Stuxnet - E-commerce de Hardware
 
-## Descrição do Problema
-O **Stuxnet** é uma API REST para um e-commerce de hardware (peças e periféricos). O sistema resolve a dificuldade de gerenciar de forma consistente o catálogo técnico, o controle de estoque em tempo real e a precisão das entregas. Ao invés de digitação manual propensa a erros, a API automatiza a validação de endereços e centraliza o fluxo de compras, garantindo que o cliente finalize o pedido com estoque reservado e endereço correto.
+##  Descrição do Problema
+O **Stuxnet** é um e-commerce completo focado no nicho de hardware, peças e periféricos de computador. O sistema resolve o problema do gerenciamento integrado de catálogo, controle de estoque em tempo real e precisão das entregas. A plataforma centraliza a jornada de compra do entusiasta de tecnologia e automatiza a validação de endereços, garantindo que o cliente navegue, compare componentes e finalize o pedido com o estoque devidamente reservado e o destino de entrega correto.
 
 ## Integrantes da Equipe
 * Andrei Santos Moreira
@@ -10,7 +10,7 @@ O **Stuxnet** é uma API REST para um e-commerce de hardware (peças e periféri
 
 
 ## Integração com API Externa
-O backend consome a API pública do **ViaCEP** (`viacep.com.br/ws/`). Ao receber um CEP no cadastro do endereço, o Stuxnet consulta essa API para obter logradouro, bairro, cidade e UF já normalizados. Esses dados são utilizados pelo sistema tanto para estruturar o perfil do cliente quanto para a regra de negócio que calcula o frete do pedido.
+O backend consome a API pública do **ViaCEP** (`viacep.com.br/ws/`). Ao receber um CEP no cadastro do endereço, o sistema consulta essa API para obter logradouro, bairro, cidade e UF já normalizados. Esses dados são utilizados pelo sistema tanto para estruturar o perfil do cliente quanto para a regra de negócio que calcula o frete do pedido.
 
 ## Requisitos Funcionais Principais (Prioridade Alta / Must)
 * **RF-001 — Cadastro de usuário:** Visitantes criam conta informando nome, e-mail, CPF e senha.
@@ -28,3 +28,4 @@ O backend consome a API pública do **ViaCEP** (`viacep.com.br/ws/`). Ao receber
 * **RF-017 — Finalizar pedido (checkout):** Valida estoque, cria o pedido, congela preços e limpa o carrinho.
 * **RF-019 — Consulta e histórico de pedidos:** Clientes acessam os detalhes e status das próprias compras.
 * **RF-021 — Atualização de status do pedido:** Administrador avança o fluxo do pedido (ex: Pago para Enviado) e informa rastreio.
+# Stuxnet - E-commerce de Hardware
