@@ -1,3 +1,4 @@
+
 package br.com.stuxnet.service.event;
 
 import java.math.BigDecimal;

@@ -1,7 +1,5 @@
-package br.com.stuxnet.dto;
 
-public class ClienteRequestDTO {
-    package br.com.stuxnet.dto;
+package br.com.stuxnet.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +8,8 @@ import jakarta.validation.constraints.Size;
 
 public record ClienteRequestDTO(
         @NotBlank(message = "O nome é obrigatório.")
-        @Size(min = 3, max = 120, message = "O nome deve ter entre 3 e 120 caracteres.")
+        @Size(min = 3, max = 120,
+              message = "O nome deve ter entre 3 e 120 caracteres.")
         String nome,
 
         @NotBlank(message = "O e-mail é obrigatório.")
@@ -18,11 +17,14 @@ public record ClienteRequestDTO(
         String email,
 
         @NotBlank(message = "O CPF é obrigatório.")
-        @Pattern(regexp = "^\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}$", message = "CPF inválido. Use o formato 000.000.000-00 ou apenas 11 dígitos.")
+        @Pattern(
+            regexp = "^\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}$",
+            message = "CPF inválido. Use 000.000.000-00 ou 11 dígitos."
+        )
         String cpf,
 
         @NotBlank(message = "A senha é obrigatória.")
-        @Size(min = 8, max = 64, message = "A senha deve ter no mínimo 8 caracteres.")
+        @Size(min = 8, max = 64,
+              message = "A senha deve ter entre 8 e 64 caracteres.")
         String senha
 ) {}
-}

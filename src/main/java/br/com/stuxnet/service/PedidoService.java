@@ -1,7 +1,9 @@
+
 package br.com.stuxnet.service;
 
 import java.math.BigDecimal;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +17,8 @@ import br.com.stuxnet.model.Pedido;
 import br.com.stuxnet.repository.ClienteRepository;
 import br.com.stuxnet.repository.ComponenteHardwareRepository;
 import br.com.stuxnet.repository.PedidoRepository;
-import jakarta.persistence.EntityNotFoundException;
-
 import br.com.stuxnet.service.event.PedidoRealizadoEvent;
-import org.springframework.context.ApplicationEventPublisher;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class PedidoService {
@@ -29,61 +29,89 @@ public class PedidoService {
     private final ComponenteHardwareRepository componenteRepository;
     private final ComponenteHardwareService componenteService;
 
-    public PedidoService(PedidoRepository pedidoRepository,
-                     ClienteRepository clienteRepository,
-                     ComponenteHardwareRepository componenteRepository,
-                     ComponenteHardwareService componenteService,
-                     ApplicationEventPublisher eventPublisher) {
-    this.pedidoRepository = pedidoRepository;
-    this.clienteRepository = clienteRepository;
-    this.componenteRepository = componenteRepository;
-    this.componenteService = componenteService;
-    this.eventPublisher = eventPublisher;
+    public PedidoService(
+            PedidoRepository pedidoRepository,
+            ClienteRepository clienteRepository,
+            ComponenteHardwareRepository componenteRepository,
+            ComponenteHardwareService componenteService,
+            ApplicationEventPublisher eventPublisher) {
+
+        this.pedidoRepository = pedidoRepository;
+        this.clienteRepository = clienteRepository;
+        this.componenteRepository = componenteRepository;
+        this.componenteService = componenteService;
+        this.eventPublisher = eventPublisher;
+    }
 
     @Transactional
     public PedidoResponseDTO realizarPedido(PedidoRequestDTO dto) {
-        Cliente cliente = clienteRepository.findById(dto.clienteId())
-                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com ID: " + dto.clienteId()));
 
-        Pedido novoPedido = new Pedido(cliente, dto.modalidadePagamento());
+        Cliente cliente = clienteRepository
+                .findById(dto.clienteId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Cliente não encontrado com ID: " + dto.clienteId()
+                ));
+
+        Pedido novoPedido = new Pedido(
+                cliente,
+                dto.modalidadePagamento()
+        );
 
         for (ItemPedidoRequestDTO itemDto : dto.itens()) {
-            ComponenteHardware hardware = componenteRepository.findBySku(itemDto.sku())
-                    .orElseThrow(() -> new EntityNotFoundException("Hardware não encontrado para o SKU: " + itemDto.sku()));
+
+            ComponenteHardware hardware = componenteRepository
+                    .findBySku(itemDto.sku())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Hardware não encontrado para o SKU: " + itemDto.sku()
+                    ));
 
             if (!hardware.isAtivo()) {
-                throw new IllegalStateException("O componente " + hardware.getSku() + " está indisponível para venda.");
+                throw new IllegalStateException(
+                        "O componente " + hardware.getSku()
+                        + " está indisponível para venda."
+                );
             }
 
             if (hardware.getQuantidadeEstoque() < itemDto.quantidade()) {
                 throw new IllegalStateException(String.format(
                         "Estoque insuficiente para '%s'. Disponível: %d, Solicitado: %d",
-                        hardware.getNome(), hardware.getQuantidadeEstoque(), itemDto.quantidade()
+                        hardware.getNome(),
+                        hardware.getQuantidadeEstoque(),
+                        itemDto.quantidade()
                 ));
             }
 
-            // Baixa atômica de estoque
-            hardware.setQuantidadeEstoque(hardware.getQuantidadeEstoque() - itemDto.quantidade());
-
-            // Aplica o Design Pattern Strategy para definir o preço unitário conforme PIX ou CARTAO
-            BigDecimal precoAplicado = componenteService.calcularPrecoPorModalidade(
-                    hardware.getPrecoBase(),
-                    dto.modalidadePagamento()
+            // Atualização do estoque
+            hardware.setQuantidadeEstoque(
+                    hardware.getQuantidadeEstoque() - itemDto.quantidade()
             );
 
-            ItemPedido itemPedido = new ItemPedido(hardware, itemDto.quantidade(), precoAplicado);
+            // Cálculo do preço usando Strategy
+            BigDecimal precoAplicado =
+                    componenteService.calcularPrecoPorModalidade(
+                            hardware.getPrecoBase(),
+                            dto.modalidadePagamento()
+                    );
+
+            ItemPedido itemPedido = new ItemPedido(
+                    hardware,
+                    itemDto.quantidade(),
+                    precoAplicado
+            );
+
             novoPedido.adicionarItem(itemPedido);
         }
 
         Pedido pedidoSalvo = pedidoRepository.save(novoPedido);
 
+        // Publicação do evento de pedido realizado
         eventPublisher.publishEvent(new PedidoRealizadoEvent(
-        pedidoSalvo.getCodigoPedido(),
-        cliente.getEmail(),
-        pedidoSalvo.getModalidadePagamento(),
-        pedidoSalvo.getValorTotal(),
-        pedidoSalvo.getDataCriacao()
-));
+                pedidoSalvo.getCodigoPedido(),
+                cliente.getEmail(),
+                pedidoSalvo.getModalidadePagamento(),
+                pedidoSalvo.getValorTotal(),
+                pedidoSalvo.getDataCriacao()
+        ));
 
         return PedidoResponseDTO.fromEntity(pedidoSalvo);
     }
