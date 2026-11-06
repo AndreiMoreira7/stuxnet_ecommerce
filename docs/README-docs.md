@@ -18,7 +18,7 @@ Esta pasta (/docs) contém a documentação arquitetural, os diagramas de modela
 
 ## Coleção do Postman (stuxnet.postman_collection.json)
 
-A coleção reúne três requisições GET à API pública ViaCEP, que mostram os três comportamentos que o backend precisa tratar. Elas não têm scripts de teste automatizado: servem para conferir manualmente a resposta da API. A verificação automatizada está nos testes Java (`ViaCepClientTest`).
+A coleção reúne três requisições GET à API pública ViaCEP, que mostram os três comportamentos que o backend precisa tratar. Elas não têm scripts de teste automatizado: servem para conferir manualmente a resposta da API. A verificação automatizada está nos testes Java (`ViaCepServiceTest`).
 
 ### Requisições da coleção
 
